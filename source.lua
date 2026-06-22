@@ -111,6 +111,75 @@ function _G.XenonLib:CreateTab(name)
             pcall(cb)
         end)
     end
+        function Actions:CreateSlider(sliderText, minVal, maxVal, defaultVal, callback)
+        local SliderFrame = Instance.new("Frame", CPg)
+        SliderFrame.Size = UDim2.new(1, -8, 0, 50)
+        SliderFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        Instance.new("UICorner", SliderFrame).CornerRadius = UDim.new(0, 6)
+        local St = Instance.new("UIStroke", SliderFrame) St.Color = Color3.fromRGB(50, 50, 50) St.Thickness = 1
+
+        local Title = Instance.new("TextLabel", SliderFrame)
+        Title.Size = UDim2.new(0.6, 0, 0, 20)
+        Title.Position = UDim2.new(0, 10, 0, 5)
+        Title.Text = sliderText
+        Title.TextColor3 = Color3.fromRGB(220, 220, 220)
+        Title.Font = Enum.Font.GothamMedium
+        Title.TextSize = 13
+        Title.TextXAlignment = Enum.TextXAlignment.Left
+        Title.BackgroundTransparency = 1
+
+        local ValueLabel = Instance.new("TextLabel", SliderFrame)
+        ValueLabel.Size = UDim2.new(0.3, 0, 0, 20)
+        ValueLabel.Position = UDim2.new(0.7, -10, 0, 5)
+        ValueLabel.Text = tostring(defaultVal)
+        ValueLabel.TextColor3 = Color3.fromRGB(140, 140, 140)
+        ValueLabel.Font = Enum.Font.GothamMedium
+        ValueLabel.TextSize = 13
+        ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
+        ValueLabel.BackgroundTransparency = 1
+
+        local SliderBg = Instance.new("Frame", SliderFrame)
+        SliderBg.Size = UDim2.new(1, -20, 0, 6)
+        SliderBg.Position = UDim2.new(0, 10, 0, 32)
+        SliderBg.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+        Instance.new("UICorner", SliderBg).CornerRadius = UDim.new(0, 3)
+
+        local SliderBar = Instance.new("Frame", SliderBg)
+        SliderBar.Size = UDim2.new((defaultVal - minVal) / (maxVal - minVal), 0, 1, 0)
+        SliderBar.BackgroundColor3 = Color3.fromRGB(109, 110, 108)
+        Instance.new("UICorner", SliderBar).CornerRadius = UDim.new(0, 3)
+
+        local UserInputService = game:GetService("UserInputService")
+        local isDragging = false
+
+        local function updateSlider(input)
+            local percentage = math.clamp((input.Position.X - SliderBg.AbsolutePosition.X) / SliderBg.AbsoluteSize.X, 0, 1)
+            local value = math.floor(minVal + (percentage * (maxVal - minVal)))
+            SliderBar.Size = UDim2.new(percentage, 0, 1, 0)
+            ValueLabel.Text = tostring(value)
+            pcall(callback, value)
+        end
+
+        SliderFrame.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                isDragging = true
+                updateSlider(input)
+            end
+        end)
+
+        UserInputService.InputChanged:Connect(function(input)
+            if isDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                updateSlider(input)
+            end
+        end)
+
+        UserInputService.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                isDragging = false
+            end
+        end)
+    end
+
        task.spawn(function()
         if name == "Info!" and CPg then
             task.wait(0.1)
