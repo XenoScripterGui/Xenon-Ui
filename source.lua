@@ -37,16 +37,8 @@ local SB = Instance.new("Frame", MF) SB.Name = "SideBar" SB.Size = UDim2.new(0, 
 Instance.new("UICorner", SB).CornerRadius = UDim.new(0, 8)
 local SL = Instance.new("UIListLayout", SB) SL.Padding = UDim.new(0, 5) SL.SortOrder = Enum.SortOrder.LayoutOrder
 local SP = Instance.new("UIPadding", SB) SP.PaddingTop = UDim.new(0, 6) SP.PaddingLeft = UDim.new(0, 6) SP.PaddingRight = UDim.new(0, 6)
-
 local Pgs = Instance.new("Frame", MF) Pgs.Size = UDim2.new(1, -150, 1, -55) Pgs.Position = UDim2.new(0, 140, 0, 45) Pgs.BackgroundTransparency = 1
-
 local IP = Instance.new("Frame", Pgs) IP.Size = UDim2.new(1, 0, 1, 0) IP.BackgroundTransparency = 1 IP.Visible = true
-local Av = Instance.new("ImageLabel", IP) Av.Size = UDim2.new(0, 70, 0, 70) Av.Position = UDim2.new(0, 10, 0, 15) Av.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-Instance.new("UICorner", Av).CornerRadius = UDim.new(0, 35)
-pcall(function() Av.Image = PL:GetUserThumbnailAsync(LP.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420) end)
-local Wl = Instance.new("TextLabel", IP) Wl.Size = UDim2.new(1, -90, 0, 20) Wl.Position = UDim2.new(0, 90, 0, 20) Wl.Text = "Welcome back," Wl.TextColor3 = Color3.fromRGB(140, 140, 140) Wl.Font = Enum.Font.Gotham Wl.TextSize = 14 Wl.TextXAlignment = Enum.TextXAlignment.Left Wl.BackgroundTransparency = 1
-local Nk = Instance.new("TextLabel", IP) Nk.Size = UDim2.new(1, -90, 0, 25) Nk.Position = UDim2.new(0, 90, 0, 40) Nk.Text = LP.Name Nk.TextColor3 = Color3.fromRGB(255, 255, 255) Nk.Font = Enum.Font.GothamBold Nk.TextSize = 18 Nk.TextXAlignment = Enum.TextXAlignment.Left Nk.BackgroundTransparency = 1
-
 local TB = Instance.new("Frame", MF) TB.Size = UDim2.new(1, 0, 0, 40) TB.BackgroundTransparency = 1
 local MT = Instance.new("TextLabel", TB) MT.Size = UDim2.new(0.5, 0, 1, 0) MT.Position = UDim2.new(0, 15, 0, 0) MT.Text = "Xenon Ui" MT.TextColor3 = Color3.fromRGB(109, 110, 108) MT.Font = Enum.Font.GothamBold MT.TextSize = 16 MT.TextXAlignment = Enum.TextXAlignment.Left MT.BackgroundTransparency = 1
 local Hd = Instance.new("Frame", TB) Hd.Size = UDim2.new(0, 80, 1, 0) Hd.Position = UDim2.new(1, -95, 0, 0) Hd.BackgroundTransparency = 1
@@ -122,7 +114,10 @@ function _G.XenonLib:CreateTab(name)
        task.spawn(function()
         if name == "Info!" and CPg then
             task.wait(0.1)
-            if CPg:FindFirstChildOfClass("UIListLayout") then CPg:FindFirstChildOfClass("UIListLayout"):Destroy() end
+            for _, oldChild in pairs(CPg:GetChildren()) do
+    if not oldChild:IsA("UIListLayout") then oldChild:Destroy() end
+end
+
             local Av = Instance.new("ImageLabel", CPg) Av.Size = UDim2.new(0,70,0,70) Av.Position = UDim2.new(0,15,0,20) Av.BackgroundColor3 = Color3.fromRGB(40,40,40) Av.BorderSizePixel = 0
             local Ac = Instance.new("UICorner", Av) Ac.CornerRadius = UDim.new(0,35)
             pcall(function() Av.Image = game:GetService("Players"):GetUserThumbnailAsync(game:GetService("Players").LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420) end)
@@ -136,4 +131,8 @@ function _G.XenonLib:CreateTab(name)
 end
 
 _G.XenonLib:Load("Xenon Ui")
+
+-- Automatyczne tworzenie i otwieranie zakładki na start
+local AutoInfoTab = _G.XenonLib:CreateTab("Info!")
+
 return _G.XenonLib
