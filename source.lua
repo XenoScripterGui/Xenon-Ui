@@ -123,4 +123,3 @@ function _G.XenonLib:CreateTab(name)
 end
 
 _G.XenonLib:Load("Xenon Ui")
-return _G.XenonLib
