@@ -119,7 +119,21 @@ function _G.XenonLib:CreateTab(name)
             pcall(cb)
         end)
     end
+       task.spawn(function()
+        if name == "Info!" and CPg then
+            task.wait(0.1)
+            if CPg:FindFirstChildOfClass("UIListLayout") then CPg:FindFirstChildOfClass("UIListLayout"):Destroy() end
+            local Av = Instance.new("ImageLabel", CPg) Av.Size = UDim2.new(0,70,0,70) Av.Position = UDim2.new(0,15,0,20) Av.BackgroundColor3 = Color3.fromRGB(40,40,40) Av.BorderSizePixel = 0
+            local Ac = Instance.new("UICorner", Av) Ac.CornerRadius = UDim.new(0,35)
+            pcall(function() Av.Image = game:GetService("Players"):GetUserThumbnailAsync(game:GetService("Players").LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420) end)
+            local Wl = Instance.new("TextLabel", CPg) Wl.Size = UDim2.new(1,-110,0,20) Wl.Position = UDim2.new(0,100,0,30) Wl.Text = "Welcome back," Wl.TextColor3 = Color3.fromRGB(140,140,140) Wl.Font = Enum.Font.Gotham Wl.TextSize = 14 Wl.TextXAlignment = Enum.TextXAlignment.Left Wl.BackgroundTransparency = 1
+            local Nk = Instance.new("TextLabel", CPg) Nk.Size = UDim2.new(1,-110,0,25) Nk.Position = UDim2.new(0,100,0,50) Nk.Text = game:GetService("Players").LocalPlayer.Name Nk.TextColor3 = Color3.fromRGB(255,255,255) Nk.Font = Enum.Font.GothamBold Nk.TextSize = 18 Nk.TextXAlignment = Enum.TextXAlignment.Left Nk.BackgroundTransparency = 1
+            CPg.Visible = true
+        end
+    end)
+ 
     return Actions
 end
 
 _G.XenonLib:Load("Xenon Ui")
+return _G.XenonLib
